@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Officer Workload Console - SLIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .sidebar-item.active {
+            background-color: #1e3a8a;
+            border-left: 4px solid #f59e0b;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 6px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen overflow-x-hidden">
+
+    <!-- Sidebar -->
+    <!-- STREAMING_CHUNK: Setting up sidebar navigation panel -->
+    <aside class="w-64 bg-[#0a2540] text-white flex flex-col justify-between shrink-0 h-screen sticky top-0 shadow-xl z-20">
+        <div>
+            <!-- SLIC Corporate Logos -->
+            <div class="p-6 border-b border-slate-700">
+                <div class="flex gap-3 mb-4">
+                    <!-- SLIC LIFE Logo -->
+                    <div class="flex-1 transition-transform duration-200 hover:scale-105">
+                        <img src="Life Logo.PNG" alt="SLIC LIFE" class="w-full h-auto rounded-lg shadow-md shadow-black/30 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/100x85/00beae/ffffff?text=SLIC+LIFE'">
+                    </div>
+
+                    <!-- SLIC GENERAL Logo -->
+                    <div class="flex-1 transition-transform duration-200 hover:scale-105">
+                        <img src="g logo.PNG" alt="SLIC GENERAL" class="w-full h-auto rounded-lg shadow-md shadow-black/30 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/100x85/e63946/ffffff?text=SLIC+GENERAL'">
+                    </div>
+                </div>
+                <!-- SLIC Golden Emblem -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-amber-400 flex items-center justify-center text-[#0a2540] font-bold text-xl shadow-lg shadow-amber-400/20">
+                        <i class="fa-solid fa-dharmachakra"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 block uppercase tracking-wider font-semibold">Procurement System</span>
+                        <span class="text-sm font-bold text-white tracking-wide">Workload Console</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="mt-6 px-3 space-y-1">
+                <a href="file:///D:/Users/50122/Desktop/11/index.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/Divition%20Summery.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-network-wired w-5"></i> Division Summary
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/Officer%20Workload.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-white">
+                    <i class="fa-solid fa-users-gear w-5 text-amber-400"></i> Officer Workload
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/officer_analysis_dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-user-check w-5"></i> Officer Analysis
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/Monthly%20Trend.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-arrow-trend-up w-5"></i> Monthly Trend
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/Report.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-folder-open w-5"></i> Reports
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-sliders w-5"></i> Settings
+                </a>
+            </nav>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-slate-700 bg-[#071d33] text-center">
+            <p class="text-xs text-slate-400 font-medium">Sri Lanka Insurance</p>
+            <p class="text-[10px] text-slate-500 italic mt-0.5">"Like a father - Like a mother"</p>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <!-- STREAMING_CHUNK: Designing workload summary dashboards and KPIs -->
+    <main class="flex-grow p-8 overflow-y-auto max-w-[calc(100vw-256px)]">
+        <!-- Top Header Panel -->
+        <div class="flex justify-between items-center mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div>
+                <span class="text-xs font-bold text-blue-600 uppercase tracking-widest block mb-1">Corporate Capacity Monitoring</span>
+                <h1 class="text-2xl font-extrabold text-[#0a2540]">Officer Capacity & Workload Balancing</h1>
+            </div>
+            <a href="procurement_dashboard.html" class="bg-slate-100 hover:bg-slate-200 text-[#0a2540] font-bold text-sm px-4 py-2.5 rounded-xl border border-slate-200 flex items-center gap-2 transition-all">
+                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- KPI Status Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-calculator"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Tracking Active Jobs</span>
+                    <span class="text-2xl font-extrabold text-slate-800" id="kpiTotalActive">217 Jobs</span>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Overloaded (>18 Jobs)</span>
+                    <span class="text-2xl font-extrabold text-rose-600" id="kpiOverloadedCount">3 Officers</span>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-arrows-spin"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Avg Jobs / Personnel</span>
+                    <span class="text-2xl font-extrabold text-slate-800" id="kpiAvgJobs">13.6 Jobs</span>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-square-check"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Overall Capacity Use</span>
+                    <span class="text-2xl font-extrabold text-emerald-600">67.8%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workload Balancer & Real-time Simulator Panel -->
+        <!-- STREAMING_CHUNK: Integrating the Real-time Interactive workload rebalancer simulator -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Smart Load Balancer UI Simulator -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <h2 class="text-base font-bold text-[#0a2540] uppercase tracking-wide flex items-center gap-2">
+                            <i class="fa-solid fa-shuffle text-blue-600"></i> Smart Balancer Simulator
+                        </h2>
+                        <span class="text-[10px] font-extrabold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md">Live Sandbox</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-6">Reassign pending jobs from overloaded personnel to under-allocated staff instantly.</p>
+                    
+                    <div class="space-y-4">
+                        <!-- Source Officer -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Reassign From (Source Officer)</label>
+                            <select id="sourceOfficerSelect" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl p-3 focus:outline-none focus:border-blue-500">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <!-- Target Officer -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Assign To (Target Officer)</label>
+                            <select id="targetOfficerSelect" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl p-3 focus:outline-none focus:border-blue-500">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <!-- Job Category -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Select Division Category</label>
+                            <select id="simCategorySelect" class="w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl p-3 focus:outline-none focus:border-blue-500">
+                                <option value="life">Life Division</option>
+                                <option value="general">General Division</option>
+                                <option value="holding">Holding Division</option>
+                                <option value="lg">Joint Life & General</option>
+                            </select>
+                        </div>
+                        <!-- Jobs Count to transfer -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">No. of Jobs to Reassign</label>
+                            <div class="flex gap-2">
+                                <input type="number" id="simCountInput" value="1" min="1" max="10" class="w-20 bg-slate-50 border border-slate-200 text-slate-800 text-sm font-bold rounded-xl p-3 text-center focus:outline-none focus:border-blue-500">
+                                <button onclick="simulateBalancing()" class="flex-grow bg-[#0a2540] hover:bg-blue-900 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-md shadow-blue-950/15">
+                                    Apply Optimization Balance
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Info Banner -->
+                <div class="mt-6 pt-4 border-t border-slate-100" id="simNotificationBox">
+                    <div class="bg-blue-50/50 border border-blue-100 p-3.5 rounded-xl text-xs text-slate-600 flex gap-2.5">
+                        <i class="fa-solid fa-circle-info text-blue-500 text-sm mt-0.5"></i>
+                        <span>Select a source officer with a <strong>High</strong> or <strong>Medium</strong> load to begin optimization modeling.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Radar / Capacity Utilization Comparison Chart -->
+            <!-- STREAMING_CHUNK: Integrating chart components for capacities comparison -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 lg:col-span-2 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-base font-bold text-[#0a2540] uppercase tracking-wide flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-chart-line text-purple-600"></i> Personnel Capacity Utilization Gap
+                    </h2>
+                    <p class="text-xs text-slate-400 mb-4">Current load compared against standard safe capacity limit (Threshold: 18 Jobs)</p>
+                </div>
+                <div class="h-80 relative">
+                    <canvas id="workloadCapacityChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Officer Workload Table Card -->
+        <!-- STREAMING_CHUNK: Building the full detailed 16 Subject Officers Workload Table -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                <div>
+                    <h2 class="text-base font-bold text-[#0a2540] uppercase tracking-wide flex items-center gap-2">
+                        <i class="fa-solid fa-users-gear text-blue-600"></i> Subject Officers Workload Register
+                    </h2>
+                    <p class="text-xs text-slate-400">Total metrics represent current active active pool. Limits based on 2026 SLAs.</p>
+                </div>
+                
+                <!-- Quick Filter Tabs -->
+                <div class="flex bg-slate-100 p-1 rounded-xl">
+                    <button onclick="filterWorkload('all')" id="btn-all" class="filter-tab px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-[#0a2540] text-white shadow-sm">All Staff</button>
+                    <button onclick="filterWorkload('High')" id="btn-high" class="filter-tab px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-500 hover:text-[#0a2540]">Overloaded (>18)</button>
+                    <button onclick="filterWorkload('Medium')" id="btn-medium" class="filter-tab px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-500 hover:text-[#0a2540]">Optimal (12-17)</button>
+                    <button onclick="filterWorkload('Low')" id="btn-low" class="filter-tab px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-500 hover:text-[#0a2540]">Underutilized (&lt;12)</button>
+                </div>
+            </div>
+
+            <!-- Scroll Window Container -->
+            <div class="overflow-y-auto max-h-[500px] border border-slate-200 rounded-2xl shadow-sm">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead class="sticky top-0 bg-slate-50 z-10 border-b border-slate-200">
+                        <tr class="text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+                            <th class="p-4 text-center w-14">#</th>
+                            <th class="p-4 min-w-[160px]">Subject Officer</th>
+                            <th class="p-4 text-center">Life</th>
+                            <th class="p-4 text-center">General</th>
+                            <th class="p-4 text-center">Holding</th>
+                            <th class="p-4 text-center">Life & General</th>
+                            <th class="p-4 text-center bg-slate-100/50">Total</th>
+                            <th class="p-4 text-center">Utilization Bar</th>
+                            <th class="p-4 text-center">Risk Index</th>
+                        </tr>
+                    </thead>
+                    <tbody id="workloadTableBody" class="divide-y divide-slate-100 text-slate-700">
+                        <!-- Filled dynamically by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-6 border-t border-slate-200 text-center text-xs text-slate-400 font-medium">
+            &copy; 2026 Sri Lanka Insurance Corporation Limited. All rights reserved. Registered Office & Headquarters, Colombo, Sri Lanka.
+        </footer>
+    </main>
+
+    <!-- Javascript Logical State Machine -->
+    <!-- STREAMING_CHUNK: Instantiating JavaScript controller logic and local database -->
+    <script>
+        // Core Balanced Dataset - 217 Jobs (procurement_dashboard.html)
+        let officersDataset = [
+             { name: 'Mr.Malith', life: 7, general: 22, holding: 18, lg: 5, total: 52, completed: 0, ongoing: 0, hold: 0, load: 'Medium' },
+                { name: 'Mr.Chaminda',  life: 4, general: 5, holding: 5, lg: 6, total: 20, completed: 0, ongoing: 0, hold: 0, load: 'Medium' },
+                { name: 'Mr.Sasidu',life: 37, general: 3, holding: 3, lg: 0, total: 43, completed: 0,  ongoing: 0, hold: 0, load: 'High' },
+                { name: 'Mr.Madawa',life: 73, general: 10, holding: 11, lg: 1, total: 95, completed: 0,  ongoing: 0, hold: 0, load: 'Medium' },
+                { name: 'Mr.Harsha',   life: 44, general: 4, holding: 5, lg: 2, total: 55, completed: 0,  ongoing: 0, hold: 0, load: 'Medium' },
+                { name: 'Mr.Udara',life: 54, general: 74, holding: 13, lg: 1, total: 142, completed: 0,  ongoing: 0, hold: 0, load: 'High' },
+                { name: 'Mr.Lashan',life: 30, general: 48, holding: 10, lg: 9, total: 97, completed: 0, ongoing: 0, hold: 0, load: 'High' },
+                { name: 'Mr.Malidu',life: 10, general: 15, holding: 0, lg: 0, total: 25, completed: 0,  ongoing: 0, hold: 0, load: 'Low' },
+                { name: 'Ms.Udeni',life: 7, general: 43, holding: 4, lg: 1, total: 55, completed: 0,  ongoing: 0, hold: 0, load: 'Medium' },
+                { name: 'Ms.Madushika',life: 12, general: 18, holding: 8, lg: 1, total: 39, completed: 0,  ongoing: 0, hold: 0, load: 'Medium' },
+                { name: 'Ms.Chalani',life: 23, general: 27, holding: 5, lg: 2, total: 58, completed: 58,  ongoing: 0, hold: 0, load: 'Medium' },
+                { name: 'Ms Eranga',life: 1, general: 1, holding: 3, lg: 4, total: 9,  completed: 0,  ongoing: 0, hold: 0, load: 'Medium' },
+                { name: 'Ms.Yamuna',life: 15, general: 22, holding: 0, lg: 2, total: 39, completed: 0,  ongoing: 0, hold: 0, load: 'Medium' },
+                { name: 'Ms.Lakmali',  life: 14, general: 61, holding: 2, lg: 1, total: 78, completed: 0,  ongoing: 0, hold: 0, load: 'High' },
+                { name: 'Ms.Hesha',  life: 0, general: 0, holding: 0, lg: 0, total: 0, completed: 0,  ongoing: 0, hold: 0, load: 'Low' },
+                { name: 'Ms.Yethmi',     life: 0, general: 0, holding: 0, lg: 0, total: 0, completed: 0,  ongoing: 0, hold: 0, load: 'Low' }
+
+
+        ];
+
+        let capacityChartInstance = null;
+        let activeFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeWorkloadDashboard();
+        });
+
+        // STREAMING_CHUNK: Initializing dashboard layout elements and dropdown selections
+        function initializeWorkloadDashboard() {
+            renderWorkloadTable(officersDataset);
+            populateSimulatorOptions();
+            updateKPIs();
+            renderCapacityChart();
+        }
+
+        // STREAMING_CHUNK: Computing sums and average capacity utilization levels
+        function updateKPIs() {
+            const total = officersDataset.reduce((sum, o) => sum + o.total, 0);
+            const avg = (total / officersDataset.length).toFixed(1);
+            const overloaded = officersDataset.filter(o => o.total > 18).length;
+
+            document.getElementById('kpiTotalActive').innerText = `${total} Jobs`;
+            document.getElementById('kpiAvgJobs').innerText = `${avg} Jobs`;
+            document.getElementById('kpiOverloadedCount').innerText = `${overloaded} Officers`;
+        }
+
+        // STREAMING_CHUNK: Populating reassign source and target dropdown parameters
+        function populateSimulatorOptions() {
+            const sourceSelect = document.getElementById('sourceOfficerSelect');
+            const targetSelect = document.getElementById('targetOfficerSelect');
+
+            sourceSelect.innerHTML = '';
+            targetSelect.innerHTML = '';
+
+            // Sort officers alphabetically to display nicely
+            const sorted = [...officersDataset].sort((a, b) => a.name.localeCompare(b.name));
+
+            sorted.forEach(o => {
+                sourceSelect.innerHTML += `<option value="${o.name}">${o.name} (${o.total} Jobs - ${o.total > 18 ? 'High' : o.total >= 12 ? 'Med' : 'Low'})</option>`;
+                targetSelect.innerHTML += `<option value="${o.name}">${o.name} (${o.total} Jobs - ${o.total > 18 ? 'High' : o.total >= 12 ? 'Med' : 'Low'})</option>`;
+            });
+
+            // Set default selections logically
+            const overloaded = officersDataset.find(o => o.total > 18);
+            const underloaded = officersDataset.find(o => o.total < 12);
+            if (overloaded) sourceSelect.value = overloaded.name;
+            if (underloaded) targetSelect.value = underloaded.name;
+        }
+
+        // STREAMING_CHUNK: Rendering the horizontal workload capability chart comparison
+        function renderCapacityChart() {
+            const ctx = document.getElementById('workloadCapacityChart').getContext('2d');
+            const names = officersDataset.map(o => o.name);
+            const totals = officersDataset.map(o => o.total);
+            const thresholds = Array(officersDataset.length).fill(18); // SLA Threshold line
+
+            if (capacityChartInstance) {
+                capacityChartInstance.destroy();
+            }
+
+            capacityChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: names,
+                    datasets: [
+                        {
+                            label: 'Active Allocated Jobs',
+                            data: totals,
+                            backgroundColor: totals.map(t => t > 18 ? '#f43f5e' : t >= 12 ? '#fbbf24' : '#10b981'),
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'SLA Capacity Ceiling (18)',
+                            data: thresholds,
+                            borderColor: '#ef4444',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            type: 'line',
+                            fill: false,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 26,
+                            grid: { color: '#f1f5f9' },
+                            ticks: { font: { size: 10, weight: 'bold' } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 9, weight: 'bold' }, maxRotation: 45, minRotation: 45 }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        // STREAMING_CHUNK: Filtering active workload tables by overloaded/optimal indicators
+        function filterWorkload(loadType) {
+            activeFilter = loadType;
+
+            // Highlight tabs
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('bg-[#0a2540]', 'text-white', 'shadow-sm');
+                tab.classList.add('text-slate-500', 'hover:text-[#0a2540]');
+            });
+            document.getElementById(`btn-${loadType.toLowerCase()}`).className = "filter-tab px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-[#0a2540] text-white shadow-sm";
+
+            let filtered = officersDataset;
+            if (loadType === 'High') {
+                filtered = officersDataset.filter(o => o.total > 18);
+            } else if (loadType === 'Medium') {
+                filtered = officersDataset.filter(o => o.total >= 12 && o.total <= 18);
+            } else if (loadType === 'Low') {
+                filtered = officersDataset.filter(o => o.total < 12);
+            }
+
+            renderWorkloadTable(filtered);
+        }
+
+        // STREAMING_CHUNK: Populating rows of the workloads matrix table dynamically
+        function renderWorkloadTable(data) {
+            const tbody = document.getElementById('workloadTableBody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400 font-semibold text-xs"><i class="fa-solid fa-folder-open text-xl mb-1.5 block"></i>No personnel match current capacity filter.</td></tr>`;
+                return;
+            }
+
+            data.forEach((o, index) => {
+                const globalIndex = officersDataset.findIndex(item => item.name === o.name) + 1;
+                const progressPct = ((o.total / 24) * 100).toFixed(0);
+                
+                let badgeHtml = '';
+                let barColor = 'bg-emerald-500';
+
+                if (o.total > 18) {
+                    badgeHtml = `<span class="px-2.5 py-1 text-[10px] font-extrabold rounded-md bg-rose-100 text-rose-800 border border-rose-200 uppercase"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Overloaded</span>`;
+                    barColor = 'bg-rose-500';
+                } else if (o.total >= 12) {
+                    badgeHtml = `<span class="px-2.5 py-1 text-[10px] font-extrabold rounded-md bg-amber-100 text-amber-800 border border-amber-200 uppercase"><i class="fa-solid fa-gauge-high mr-1"></i>Optimal</span>`;
+                    barColor = 'bg-amber-500';
+                } else {
+                    badgeHtml = `<span class="px-2.5 py-1 text-[10px] font-extrabold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200 uppercase"><i class="fa-solid fa-circle-check mr-1"></i>Underutilized</span>`;
+                    barColor = 'bg-emerald-500';
+                }
+
+                tbody.innerHTML += `
+                    <tr class="transition-colors hover:bg-slate-50 border-b border-slate-100">
+                        <td class="p-3.5 text-center font-bold text-slate-400 border-r border-slate-100">${globalIndex}</td>
+                        <td class="p-3.5 font-bold text-[#0a2540] text-sm">${o.name}</td>
+                        <td class="p-3.5 text-center font-extrabold text-slate-600">${o.life}</td>
+                        <td class="p-3.5 text-center font-extrabold text-slate-600">${o.general}</td>
+                        <td class="p-3.5 text-center font-extrabold text-slate-600">${o.holding}</td>
+                        <td class="p-3.5 text-center font-extrabold text-slate-600">${o.lg}</td>
+                        <td class="p-3.5 text-center font-black text-slate-800 bg-slate-50 text-sm border-l border-r border-slate-100">${o.total}</td>
+                        <td class="p-3.5">
+                            <div class="flex items-center gap-2">
+                                <div class="w-24 bg-slate-100 h-2 rounded-full overflow-hidden shrink-0">
+                                    <div class="${barColor} h-full" style="width: ${Math.min(progressPct, 100)}%"></div>
+                                </div>
+                                <span class="text-[10px] text-slate-500 font-bold">${progressPct}%</span>
+                            </div>
+                        </td>
+                        <td class="p-3.5 text-center">${badgeHtml}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // STREAMING_CHUNK: Running real-time sandboxed load balancer calculations on state variables
+        function simulateBalancing() {
+            const srcName = document.getElementById('sourceOfficerSelect').value;
+            const trgName = document.getElementById('targetOfficerSelect').value;
+            const category = document.getElementById('simCategorySelect').value;
+            const count = parseInt(document.getElementById('simCountInput').value);
+
+            const source = officersDataset.find(o => o.name === srcName);
+            const target = officersDataset.find(o => o.name === trgName);
+
+            const infoBox = document.getElementById('simNotificationBox');
+
+            if (srcName === trgName) {
+                infoBox.innerHTML = `
+                    <div class="bg-rose-50 border border-rose-100 p-3.5 rounded-xl text-xs text-rose-700 flex gap-2.5">
+                        <i class="fa-solid fa-circle-exclamation text-rose-500 text-sm mt-0.5"></i>
+                        <span>Validation Error: Source and Target officers cannot be the same person.</span>
+                    </div>
+                `;
+                return;
+            }
+
+            // Check if source has enough jobs in specified category
+            let available = source[category];
+            if (available < count) {
+                infoBox.innerHTML = `
+                    <div class="bg-rose-50 border border-rose-100 p-3.5 rounded-xl text-xs text-rose-700 flex gap-2.5">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-500 text-sm mt-0.5"></i>
+                        <span>Insufficient Jobs: <strong>${source.name}</strong> only has <strong>${available}</strong> jobs inside selected category (Requested: ${count}).</span>
+                    </div>
+                `;
+                return;
+            }
+
+            // Apply reassignment mathematically
+            source[category] -= count;
+            source.total -= count;
+
+            target[category] += count;
+            target.total += count;
+
+            // Sync with Table and charts
+            filterWorkload(activeFilter);
+            populateSimulatorOptions();
+            updateKPIs();
+            renderCapacityChart();
+
+            infoBox.innerHTML = `
+                <div class="bg-emerald-50 border border-emerald-100 p-3.5 rounded-xl text-xs text-emerald-700 flex gap-2.5">
+                    <i class="fa-solid fa-circle-check text-emerald-500 text-sm mt-0.5"></i>
+                    <div>
+                        <strong class="block uppercase text-[10px] mb-0.5">Optimization Applied Successfully!</strong>
+                        <span>Transferred <strong>${count}</strong> jobs (${category.toUpperCase()}) from <strong>${source.name}</strong> to <strong>${target.name}</strong>.</span>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

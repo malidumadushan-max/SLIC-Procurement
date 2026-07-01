@@ -1,0 +1,553 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer Analysis Console - SLIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .sidebar-item.active {
+            background-color: #1e3a8a;
+            border-left: 4px solid #f59e0b;
+        }
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 6px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Dynamic transition effects */
+        .drawer-transition {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen overflow-x-hidden">
+
+    <!-- Sidebar (Matches design theme perfectly) -->
+    <aside class="w-64 bg-[#0a2540] text-white flex flex-col justify-between shrink-0 h-screen sticky top-0 shadow-xl z-20">
+        <div>
+            <!-- SLIC Corporate Logos -->
+            <div class="p-6 border-b border-slate-700">
+                <div class="flex gap-3 mb-4">
+                    <!-- SLIC LIFE Logo -->
+                    <div class="flex-1 transition-transform duration-200 hover:scale-105">
+                        <img src="Life Logo.PNG" alt="SLIC LIFE" class="w-full h-auto rounded-lg shadow-md shadow-black/30 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/100x85/00beae/ffffff?text=SLIC+LIFE'">
+                    </div>
+
+                    <!-- SLIC GENERAL Logo -->
+                    <div class="flex-1 transition-transform duration-200 hover:scale-105">
+                        <img src="g logo.PNG" alt="SLIC GENERAL" class="w-full h-auto rounded-lg shadow-md shadow-black/30 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/100x85/e63946/ffffff?text=SLIC+GENERAL'">
+                    </div>
+                </div>
+                <!-- SLIC Golden Emblem -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-amber-400 flex items-center justify-center text-[#0a2540] font-bold text-xl shadow-lg shadow-amber-400/20">
+                        <i class="fa-solid fa-dharmachakra"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 block uppercase tracking-wider font-semibold">Procurement System</span>
+                        <span class="text-sm font-bold text-white tracking-wide">Analysis Console</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Links (Highlighting Officer Analysis) -->
+            <nav class="mt-6 px-3 space-y-1">
+                <a href="file:///D:/Users/50122/Desktop/11/index.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/Divition%20Summery.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-network-wired w-5"></i> Division Summary
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/Officer%20Workload.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-users-gear w-5"></i> Officer Workload
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/officer_analysis_dashboard.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-white">
+                    <i class="fa-solid fa-user-check w-5 text-amber-400"></i> Officer Analysis
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/Monthly%20Trend.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-arrow-trend-up w-5"></i> Monthly Trend
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-list-check w-5"></i> Status Overview
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/Report.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-folder-open w-5"></i> Reports
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-sliders w-5"></i> Settings
+                </a>
+            </nav>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-slate-700 bg-[#071d33] text-center">
+            <p class="text-xs text-slate-400 font-medium">Sri Lanka Insurance</p>
+            <p class="text-[10px] text-slate-500 italic mt-0.5">"Like a father - Like a mother"</p>
+        </div>
+    </aside>
+
+    <!-- Main content area -->
+    <main class="flex-grow p-8 overflow-y-auto max-w-[calc(100vw-256px)]">
+        <!-- Top Header Panel -->
+        <div class="flex justify-between items-center mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div>
+                <span class="text-xs font-bold text-blue-600 uppercase tracking-widest block mb-1">Officer Insights & Metrics</span>
+                <h1 class="text-2xl font-extrabold text-[#0a2540]">Subject Officer Analysis Panel</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="file:///D:/Users/50122/Desktop/11/Dashboard%202026.html" class="bg-slate-100 hover:bg-slate-200 text-[#0a2540] font-bold text-sm px-4 py-2.5 rounded-xl border border-slate-200 flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </a>
+                <button class="bg-[#0a2540] hover:bg-blue-900 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow-md flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-download"></i> Export Analytics
+                </button>
+            </div>
+        </div>
+
+        <!-- Analytics Top Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-user-tie"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Total Officers</span>
+                    <span class="text-2xl font-extrabold text-slate-800">16 Active</span>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-star-half-stroke"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Avg Completion Rate</span>
+                    <span class="text-2xl font-extrabold text-slate-800">50.2%</span>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Peak Workload Load</span>
+                    <span class="text-2xl font-extrabold text-slate-800">23 Jobs <span class="text-xs text-rose-500 font-bold">(S. Fernando)</span></span>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Top Performer</span>
+                    <span class="text-2xl font-extrabold text-slate-800">K. D. Perera</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Officer Performance Ranking Chart (Completion Rates) -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 lg:col-span-2 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-base font-bold text-[#0a2540] uppercase tracking-wide flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-chart-bar text-blue-600"></i> Officer Job Completion Efficiency (%)
+                    </h2>
+                    <p class="text-xs text-slate-400 mb-4">Percentage of completed jobs out of total assigned jobs per officer</p>
+                </div>
+                <div class="h-80 relative">
+                    <canvas id="officerPerformanceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Division Balance Matrix -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-base font-bold text-[#0a2540] uppercase tracking-wide flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-sliders text-purple-600"></i> Work Stress Indicators
+                    </h2>
+                    <p class="text-xs text-slate-400 mb-4">Workload category index across all active personnel</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-xs font-bold text-slate-700 mb-1">
+                            <span>High Workload Officers (>18 Jobs)</span>
+                            <span class="text-rose-600">4 Officers</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                            <div class="bg-rose-500 h-full" style="width: 25%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-bold text-slate-700 mb-1">
+                            <span>Medium Workload Officers (12-17 Jobs)</span>
+                            <span class="text-amber-600">9 Officers</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                            <div class="bg-amber-500 h-full" style="width: 56.25%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-bold text-slate-700 mb-1">
+                            <span>Low Workload Officers (<12 Jobs)</span>
+                            <span class="text-emerald-600">3 Officers</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                            <div class="bg-emerald-500 h-full" style="width: 18.75%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-100 bg-slate-50 p-3 rounded-xl text-center text-xs text-slate-500 font-medium">
+                    <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Balance workloads by shifting Holding division tasks to low stress officers.
+                </div>
+            </div>
+        </div>
+
+        <!-- Search & Filter Controls -->
+        <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-6 bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
+            <div class="relative w-full md:w-80">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" id="officerSearchInput" placeholder="Search officer by name..." class="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 text-sm">
+            </div>
+            <div class="flex gap-2 w-full md:w-auto">
+                <button onclick="filterOfficers('all')" class="filter-tab px-4 py-2 bg-[#0a2540] text-white rounded-lg text-xs font-bold transition-all shadow-sm">All</button>
+                <button onclick="filterOfficers('High')" class="filter-tab px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs font-bold transition-all">High Load</button>
+                <button onclick="filterOfficers('Medium')" class="filter-tab px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs font-bold transition-all">Medium Load</button>
+                <button onclick="filterOfficers('Low')" class="filter-tab px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs font-bold transition-all">Low Load</button>
+            </div>
+        </div>
+
+        <!-- Officer Cards Grid -->
+        <div id="officerGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Dynamically populated cards via JavaScript -->
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-6 border-t border-slate-200 text-center text-xs text-slate-400 font-medium">
+            &copy; 2026 Sri Lanka Insurance Corporation Limited. All rights reserved. Registered Office & Headquarters, Colombo, Sri Lanka.
+        </footer>
+    </main>
+
+    <!-- Slide-Out Side Drawer for Officer Detailed Analytics -->
+    <div id="officerDrawer" class="fixed right-0 top-0 h-screen w-96 bg-white shadow-2xl z-30 translate-x-full drawer-transition border-l border-slate-100 flex flex-col justify-between">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+            <h3 class="text-base font-extrabold text-[#0a2540] uppercase tracking-wide">Officer Performance Profile</h3>
+            <button onclick="closeOfficerDrawer()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-all">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <div class="p-6 overflow-y-auto flex-grow space-y-6">
+            <!-- Profile Info Header -->
+            <div class="text-center">
+                <div class="w-20 h-20 rounded-full bg-slate-100 mx-auto flex items-center justify-center text-slate-400 text-3xl font-extrabold shadow-sm border border-slate-200 mb-3" id="drawerInitials">
+                    -
+                </div>
+                <h4 class="text-lg font-black text-slate-800" id="drawerName">Officer Name</h4>
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold inline-block mt-1" id="drawerBadge">Load Badge</span>
+            </div>
+
+            <!-- Division Distribution Progress Bars -->
+            <div>
+                <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Division Job Portfolio</h5>
+                <div class="space-y-3" id="drawerDivisions">
+                    <!-- Progress lines filled dynamic -->
+                </div>
+            </div>
+
+            <!-- Status Distribution Breakdown Chart -->
+            <div>
+                <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Job Status Allocation</h5>
+                <div class="h-40 relative flex justify-center">
+                    <canvas id="drawerStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 bg-slate-50 border-t border-slate-100 space-y-3">
+            <div class="flex justify-between items-center text-xs">
+                <span class="text-slate-500">Handling Efficiency:</span>
+                <span class="font-extrabold text-blue-600" id="drawerEfficiency">0%</span>
+            </div>
+            <button onclick="alert('Work reassignment trigger initiated for selected officer.')" class="w-full bg-[#0a2540] hover:bg-blue-900 text-white font-bold text-xs py-3 rounded-xl shadow-md transition-all">
+                <i class="fa-solid fa-people-arrows mr-1"></i> Balance Workload Portfolio
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Synchronized dataset matching Dashboard perfectly
+        const officersDataset = [
+            { name: 'Mr.Malith', life: 7, general: 22, holding: 18, lg: 5, total: 52, completed: 0, ongoing: 0, hold: 0, load: 'High' },
+            { name: 'Mr.Chaminda',  life: 4, general: 5, holding: 5, lg: 6, total: 20, completed: 10, ongoing: 6, hold: 4, load: 'High' },
+            { name: 'Mr.Sasidu',life: 37, general: 3, holding: 3, lg: 0, total: 43, completed: 30,  ongoing: 0, hold: 0, load: 'Medium' },
+            { name: 'Mr.Madawa',life: 2, general: 3, holding: 4, lg: 4, total: 13, completed: 7,  ongoing: 4, hold: 2, load: 'Medium' },
+            { name: 'Mr.Harsha',   life: 3, general: 4, holding: 5, lg: 5, total: 17, completed: 9,  ongoing: 5, hold: 3, load: 'High' },
+            { name: 'Mr.Udara',life: 2, general: 3, holding: 6, lg: 5, total: 16, completed: 8,  ongoing: 5, hold: 3, load: 'Medium' },
+            { name: 'Mr.Lashan',life: 2, general: 1, holding: 4, lg: 4, total: 11, completed: 6, ongoing: 3, hold: 2, load: 'Hight' },
+            { name: 'Mr.Malidu',life: 1, general: 3, holding: 4, lg: 3, total: 11, completed: 5,  ongoing: 4, hold: 2, load: 'Low' },
+            { name: 'Ms.Yamuna',life: 2, general: 3, holding: 4, lg: 4, total: 13, completed: 6,  ongoing: 4, hold: 3, load: 'Medium' },
+            { name: 'Ms.Madushika',life: 3, general: 4, holding: 5, lg: 4, total: 16, completed: 8,  ongoing: 5, hold: 3, load: 'Medium' },
+            { name: 'Ms.Lakmali',life: 3, general: 2, holding: 4, lg: 5, total: 14, completed: 7,  ongoing: 4, hold: 3, load: 'Medium' },
+            { name: 'Ms.Eranga',life: 1, general: 1, holding: 3, lg: 4, total: 9,  completed: 4,  ongoing: 3, hold: 2, load: 'Low' },
+            { name: 'Ms.Udeni',life: 2, general: 3, holding: 4, lg: 4, total: 13, completed: 6,  ongoing: 4, hold: 3, load: 'Medium' },
+            { name: 'Ms.Chalani',  life: 2, general: 2, holding: 3, lg: 4, total: 11, completed: 6,  ongoing: 3, hold: 2, load: 'Low' },
+            { name: 'Ms.Hesha',  life: 1, general: 3, holding: 3, lg: 3, total: 10, completed: 5,  ongoing: 3, hold: 2, load: 'Low' },
+            { name: 'Ms.Yethmi',     life: 1, general: 1, holding: 7, lg: 2, total: 11, completed: 4,  ongoing: 5, hold: 2, load: 'Medium' }
+        ];
+
+        let currentFilter = 'all';
+        let statusDoughnutChart = null; // Store chart instance for side drawer
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderOfficerCards(officersDataset);
+            initializeOverviewChart();
+
+            // Setup search function
+            document.getElementById('officerSearchInput').addEventListener('input', (e) => {
+                const searchVal = e.target.value.toLowerCase();
+                const filtered = officersDataset.filter(o => 
+                    o.name.toLowerCase().includes(searchVal) && 
+                    (currentFilter === 'all' || o.load === currentFilter)
+                );
+                renderOfficerCards(filtered);
+            });
+        });
+
+        function renderOfficerCards(data) {
+            const container = document.getElementById('officerGrid');
+            container.innerHTML = '';
+
+            if(data.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-white p-8 rounded-2xl text-center border border-slate-100 text-slate-400">
+                        <i class="fa-solid fa-user-slash text-4xl mb-3"></i>
+                        <p class="text-sm font-bold">No officers match your search/filter criteria.</p>
+                    </div>`;
+                return;
+            }
+
+            data.forEach(officer => {
+                const initials = officer.name.split(' ').map(n => n[0]).join('');
+                const completionRate = Math.round((officer.completed / officer.total) * 100);
+
+                let loadClass = '';
+                if(officer.load === 'High') loadClass = 'bg-rose-100 text-rose-800 border-rose-200';
+                else if(officer.load === 'Medium') loadClass = 'bg-amber-100 text-amber-800 border-amber-200';
+                else loadClass = 'bg-emerald-100 text-emerald-800 border-emerald-200';
+
+                const cardHtml = `
+                    <div onclick="openOfficerDrawer('${officer.name}')" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-2 h-full bg-[#0a2540] transform scale-y-0 group-hover:scale-y-100 transition-transform duration-200"></div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-slate-100 font-extrabold text-sm text-slate-600 flex items-center justify-center border border-slate-200">
+                                ${initials}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-sm group-hover:text-blue-600 transition-colors">${officer.name}</h4>
+                                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full border ${loadClass}">${officer.load} Workload</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 mb-4 bg-slate-50 p-2.5 rounded-xl text-center text-xs">
+                            <div>
+                                <span class="text-[10px] text-slate-400 font-bold block uppercase">Total Jobs</span>
+                                <span class="font-black text-slate-700">${officer.total}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-slate-400 font-bold block uppercase">Completed</span>
+                                <span class="font-black text-emerald-600">${officer.completed}</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-[11px] font-semibold text-slate-500 mb-1">
+                                <span>Efficiency Index</span>
+                                <span>${completionRate}%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-blue-600 h-full" style="width: ${completionRate}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+        }
+
+        function filterOfficers(loadType) {
+            currentFilter = loadType;
+            const tabs = document.querySelectorAll('.filter-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('bg-[#0a2540]', 'text-white', 'shadow-sm');
+                tab.classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+            });
+
+            // Set current tab active
+            const currentTab = Array.from(tabs).find(tab => tab.textContent.includes(loadType === 'all' ? 'All' : loadType));
+            if (currentTab) {
+                currentTab.classList.remove('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200');
+                currentTab.classList.add('bg-[#0a2540]', 'text-white', 'shadow-sm');
+            }
+
+            const searchVal = document.getElementById('officerSearchInput').value.toLowerCase();
+            const filtered = officersDataset.filter(o => 
+                (loadType === 'all' || o.load === loadType) && 
+                o.name.toLowerCase().includes(searchVal)
+            );
+            renderOfficerCards(filtered);
+        }
+
+        function initializeOverviewChart() {
+            const ctx = document.getElementById('officerPerformanceChart').getContext('2d');
+            const names = officersDataset.map(o => o.name);
+            const efficiency = officersDataset.map(o => Math.round((o.completed / o.total) * 100));
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: names,
+                    datasets: [{
+                        label: 'Completion efficiency (%)',
+                        data: efficiency,
+                        backgroundColor: '#0284c7',
+                        borderRadius: 6,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) { return value + "%" }
+                            }
+                        },
+                        x: {
+                            ticks: { font: { size: 9, weight: 'bold' }, maxRotation: 45, minRotation: 45 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function openOfficerDrawer(name) {
+            const officer = officersDataset.find(o => o.name === name);
+            if(!officer) return;
+
+            const initials = officer.name.split(' ').map(n => n[0]).join('');
+            const efficiency = Math.round((officer.completed / officer.total) * 100);
+
+            document.getElementById('drawerInitials').innerText = initials;
+            document.getElementById('drawerName').innerText = officer.name;
+            document.getElementById('drawerEfficiency').innerText = efficiency + "%";
+
+            // Set load badge styling
+            const badge = document.getElementById('drawerBadge');
+            badge.innerText = officer.load + " Workload";
+            badge.className = "px-3 py-1 rounded-full text-xs font-extrabold inline-block mt-1 ";
+            if(officer.load === 'High') badge.classList.add('bg-rose-100', 'text-rose-800');
+            else if(officer.load === 'Medium') badge.classList.add('bg-amber-100', 'text-amber-800');
+            else badge.classList.add('bg-emerald-100', 'text-emerald-800');
+
+            // Set division portfolio lines
+            const divisionsContainer = document.getElementById('drawerDivisions');
+            divisionsContainer.innerHTML = `
+                <div>
+                    <div class="flex justify-between text-xs font-bold text-slate-600 mb-0.5">
+                        <span>Life Insurance</span>
+                        <span>${officer.life} Jobs</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-blue-400 h-full" style="width: ${(officer.life / officer.total) * 100}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs font-bold text-slate-600 mb-0.5">
+                        <span>General Insurance</span>
+                        <span>${officer.general} Jobs</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-rose-400 h-full" style="width: ${(officer.general / officer.total) * 100}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs font-bold text-slate-600 mb-0.5">
+                        <span>Holding Portfolio</span>
+                        <span>${officer.holding} Jobs</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-amber-400 h-full" style="width: ${(officer.holding / officer.total) * 100}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs font-bold text-slate-600 mb-0.5">
+                        <span>Life & General Joint</span>
+                        <span>${officer.lg} Jobs</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-purple-400 h-full" style="width: ${(officer.lg / officer.total) * 100}%"></div>
+                    </div>
+                </div>
+            `;
+
+            // Draw status breakdown pie chart in modal
+            const ctxStatus = document.getElementById('drawerStatusChart').getContext('2d');
+            if (statusDoughnutChart) {
+                statusDoughnutChart.destroy();
+            }
+
+            statusDoughnutChart = new Chart(ctxStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Completed', 'Ongoing', 'On Hold'],
+                    datasets: [{
+                        data: [officer.completed, officer.ongoing, officer.hold],
+                        backgroundColor: ['#10b981', '#f59e0b', '#f43f5e']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            // Slide open the drawer
+            document.getElementById('officerDrawer').classList.remove('translate-x-full');
+        }
+
+        function closeOfficerDrawer() {
+            document.getElementById('officerDrawer').classList.add('translate-x-full');
+        }
+    </script>
+</body>
+</html>

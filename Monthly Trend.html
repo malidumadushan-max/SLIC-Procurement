@@ -1,0 +1,484 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Trend Analysis Console - SLIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .sidebar-item.active {
+            background-color: #1e3a8a;
+            border-left: 4px solid #f59e0b;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 6px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .trend-table-row:hover {
+            background-color: #f1f5f9;
+            cursor: pointer;
+        }
+        .trend-table-row.selected {
+            background-color: #e2e8f0;
+            border-left: 4px solid #8b5cf6;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen overflow-x-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#0a2540] text-white flex flex-col justify-between shrink-0 h-screen sticky top-0 shadow-xl z-20">
+        <div>
+            <!-- SLIC Corporate Logos -->
+            <div class="p-6 border-b border-slate-700">
+                <div class="flex gap-3 mb-4">
+                    <!-- SLIC LIFE Logo -->
+                    <div class="flex-1 transition-transform duration-200 hover:scale-105">
+                        <img src="Life Logo.PNG" alt="SLIC LIFE" class="w-full h-auto rounded-lg shadow-md shadow-black/30 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/100x85/00beae/ffffff?text=SLIC+LIFE'">
+                    </div>
+
+                    <!-- SLIC GENERAL Logo -->
+                    <div class="flex-1 transition-transform duration-200 hover:scale-105">
+                        <img src="g logo.PNG" alt="SLIC GENERAL" class="w-full h-auto rounded-lg shadow-md shadow-black/30 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/100x85/e63946/ffffff?text=SLIC+GENERAL'">
+                    </div>
+                </div>
+                <!-- SLIC Golden Emblem -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-amber-400 flex items-center justify-center text-[#0a2540] font-bold text-xl shadow-lg shadow-amber-400/20">
+                        <i class="fa-solid fa-dharmachakra"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-400 block uppercase tracking-wider font-semibold">Procurement System</span>
+                        <span class="text-sm font-bold text-white tracking-wide">Trend Explorer</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="mt-6 px-3 space-y-1">
+                <a href="file:///D:/Users/50122/Desktop/11/index.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/Divition%20Summery.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-network-wired w-5"></i> Division Summary
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/Officer%20Workload.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-users-gear w-5"></i> Officer Workload
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/officer_analysis_dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-user-check w-5"></i> Officer Analysis
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/Monthly%20Trend.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all text-white">
+                    <i class="fa-solid fa-arrow-trend-up w-5 text-amber-400"></i> Monthly Trend
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-list-check w-5"></i> Status Overview
+                </a>
+                <a href="file:///D:/Users/50122/Desktop/11/Report.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-folder-open w-5"></i> Reports
+                </a>
+                <a href="#" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <i class="fa-solid fa-sliders w-5"></i> Settings
+                </a>
+            </nav>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-slate-700 bg-[#071d33] text-center">
+            <p class="text-xs text-slate-400 font-medium">Sri Lanka Insurance</p>
+            <p class="text-[10px] text-slate-500 italic mt-0.5">"Like a father - Like a mother"</p>
+        </div>
+    </aside>
+
+    <!-- Main content area -->
+    <main class="flex-grow p-8 overflow-y-auto max-w-[calc(100vw-256px)]">
+        <!-- Top Header Panel -->
+        <div class="flex justify-between items-center mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+            <div>
+                <span class="text-xs font-bold text-blue-600 uppercase tracking-widest block mb-1">Procurement Operational Trend</span>
+                <h1 class="text-2xl font-extrabold text-[#0a2540]">Monthly Procurement Trend Analysis</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="file:///D:/Users/50122/Desktop/11/Dashboard%202026.html" class="bg-slate-100 hover:bg-slate-200 text-[#0a2540] font-bold text-sm px-4 py-2.5 rounded-xl border border-slate-200 flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </a>
+                <button class="bg-[#0a2540] hover:bg-blue-900 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow-md flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-download"></i> Export Trend Data
+                </button>
+            </div>
+        </div>
+
+        <!-- Analytics Top Cards (Processing image_155224.png and image_155265.png metrics) -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-database"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Annual Total Jobs</span>
+                    <span class="text-2xl font-extrabold text-slate-800" id="statTotalJobs">902 Jobs</span>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-calculator"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Monthly Average</span>
+                    <span class="text-2xl font-extrabold text-slate-800">75.2 Jobs</span>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-chart-line-up"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Peak Load (July)</span>
+                    <span class="text-2xl font-extrabold text-slate-800">91 Jobs</span>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Dominant Division</span>
+                    <span class="text-2xl font-extrabold text-slate-800">Life <span class="text-xs text-blue-600 font-bold">(44.6%)</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Line Chart: Annual Procurement Volume Curve -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 lg:col-span-2 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <h2 class="text-base font-bold text-[#0a2540] uppercase tracking-wide flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-purple-600"></i> Annual Procurement Trend Curve
+                        </h2>
+                        <span class="text-[10px] font-extrabold bg-purple-50 text-purple-700 px-2.5 py-1 rounded-md">Dataset: image_155224.png</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4">Detailed track of monthly processed volume throughout the current fiscal cycle</p>
+                </div>
+                <div class="h-80 relative">
+                    <canvas id="monthlyTrendAnalysisChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Donut Chart: Cumulative Division Allocation Share -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <h2 class="text-base font-bold text-[#0a2540] uppercase tracking-wide flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-emerald-600"></i> Division Allocation Share
+                        </h2>
+                        <span class="text-[10px] font-extrabold bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-md">Dataset: image_155265.png</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4">Total allocation distribution of jobs across SLIC divisions</p>
+                </div>
+                <div class="h-60 relative flex justify-center items-center">
+                    <canvas id="divisionDonutShareChart"></canvas>
+                </div>
+                <div class="text-center text-xs text-slate-500 font-medium bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                    <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Life & General divisions contribute 84.1% of all workloads.
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Monthly Dataset & Insights Segment -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Monthly Interactive Data Grid -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 lg:col-span-2">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h3 class="text-sm font-extrabold text-[#0a2540] uppercase tracking-wider">Processed Monthly Volumes Table</h3>
+                        <p class="text-xs text-slate-400">Click on any month to view dynamic analytical feedback</p>
+                    </div>
+                    <span class="text-xs font-bold text-[#0a2540] bg-slate-100 px-3 py-1.5 rounded-xl">12 Months Tracked</span>
+                </div>
+                <div class="overflow-x-auto rounded-xl border border-slate-100">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 font-bold border-b border-slate-100">
+                                <th class="p-3">Month</th>
+                                <th class="p-3 text-center">Volume (Jobs)</th>
+                                <th class="p-3 text-center">Contribution (%)</th>
+                                <th class="p-3 text-center">Status vs. Average</th>
+                                <th class="p-3 text-center rounded-r-lg">Operations Indicator</th>
+                            </tr>
+                        </thead>
+                        <tbody id="monthlyTrendTableBody" class="divide-y divide-slate-100">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Dynamic Insights Output Box -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-sm font-extrabold text-[#0a2540] uppercase tracking-wider mb-2">Dynamic Month Analytical Feedback</h3>
+                    <p class="text-xs text-slate-400 mb-4">Detailed metrics of the selected month of operations</p>
+                </div>
+                <div id="insightsPanel" class="bg-slate-50 border border-slate-100 p-5 rounded-2xl space-y-4 flex-grow flex flex-col justify-center">
+                    <div class="text-center">
+                        <i class="fa-solid fa-pointer-arrow text-3xl text-purple-500 mb-2 animate-bounce"></i>
+                        <h4 class="font-bold text-slate-700 text-sm">Interactive Data Explorer</h4>
+                        <p class="text-xs text-slate-400 mt-1 max-w-[200px] mx-auto">Please click on a month row in the table to display instant analytical summaries and alerts.</p>
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <button class="text-xs font-extrabold text-blue-600 hover:text-blue-800 transition-colors" onclick="resetInsights()">Reset Overview</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-6 border-t border-slate-200 text-center text-xs text-slate-400 font-medium">
+            &copy; 2026 Sri Lanka Insurance Corporation Limited. All rights reserved. Registered Office & Headquarters, Colombo, Sri Lanka.
+        </footer>
+    </main>
+
+    <script>
+        // High fidelity dataset from image_155224.png
+        const monthlyDataset = [
+            { id: 1, month: 'January', jobs: 54 },
+            { id: 2, month: 'February', jobs: 90 },
+            { id: 3, month: 'March', jobs: 90 },
+            { id: 4, month: 'April', jobs: 89 },
+            { id: 5, month: 'May', jobs: 72 },
+            { id: 6, month: 'June', jobs: 74 },
+            { id: 7, month: 'July', jobs: 91 },
+            { id: 8, month: 'August', jobs: 58 },
+            { id: 9, month: 'September', jobs: 86 },
+            { id: 10, month: 'October', jobs: 73 },
+            { id: 11, month: 'November', jobs: 67 },
+            { id: 12, month: 'December', jobs: 58 }
+        ];
+
+        // High fidelity dataset from image_155265.png
+        const divisionDataset = {
+            labels: ['Life', 'General', 'Holding', 'Life & General'],
+            data: [402, 356, 113, 31],
+            colors: ['#0ea5e9', '#ef4444', '#f59e0b', '#a855f7']
+        };
+
+        const totalJobs = 902;
+        const avgJobs = 75.2;
+
+        let trendChart = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMonthlyTable();
+            initializeCharts();
+        });
+
+        function renderMonthlyTable() {
+            const tableBody = document.getElementById('monthlyTrendTableBody');
+            tableBody.innerHTML = '';
+
+            monthlyDataset.forEach(item => {
+                const percentage = ((item.jobs / totalJobs) * 100).toFixed(1);
+                const vsAvg = item.jobs - avgJobs;
+                let vsAvgHtml = '';
+                let indicatorColor = '';
+
+                if (vsAvg > 5) {
+                    vsAvgHtml = `<span class="text-emerald-600 font-bold text-[10px]"><i class="fa-solid fa-caret-up mr-1"></i>+${vsAvg.toFixed(1)} High</span>`;
+                    indicatorColor = 'bg-emerald-500';
+                } else if (vsAvg < -5) {
+                    vsAvgHtml = `<span class="text-rose-600 font-bold text-[10px]"><i class="fa-solid fa-caret-down mr-1"></i>${vsAvg.toFixed(1)} Low</span>`;
+                    indicatorColor = 'bg-rose-500';
+                } else {
+                    vsAvgHtml = `<span class="text-amber-500 font-bold text-[10px]"><i class="fa-solid fa-minus mr-1"></i>Stable</span>`;
+                    indicatorColor = 'bg-amber-500';
+                }
+
+                const row = document.createElement('tr');
+                row.className = 'trend-table-row transition-all border-b border-slate-100';
+                row.id = `row-${item.id}`;
+                row.onclick = () => selectMonth(item.id);
+                row.innerHTML = `
+                    <td class="p-3 font-bold text-slate-800">${item.month}</td>
+                    <td class="p-3 text-center font-extrabold text-slate-700">${item.jobs}</td>
+                    <td class="p-3 text-center text-slate-500 font-bold">${percentage}%</td>
+                    <td class="p-3 text-center">${vsAvgHtml}</td>
+                    <td class="p-3">
+                        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                            <div class="${indicatorColor} h-full" style="width: ${(item.jobs / 91) * 100}%"></div>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function initializeCharts() {
+            // Main Line Chart
+            const ctxTrend = document.getElementById('monthlyTrendAnalysisChart').getContext('2d');
+            const labels = monthlyDataset.map(item => item.month);
+            const data = monthlyDataset.map(item => item.jobs);
+
+            trendChart = new Chart(ctxTrend, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Procurements Volume',
+                        data: data,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.05)',
+                        fill: true,
+                        tension: 0.35,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#8b5cf6',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f1f5f9' },
+                            ticks: { font: { size: 10, weight: 'bold' } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 10, weight: 'bold' } }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // Division Share Donut Chart
+            const ctxDonut = document.getElementById('divisionDonutShareChart').getContext('2d');
+            new Chart(ctxDonut, {
+                type: 'doughnut',
+                data: {
+                    labels: divisionDataset.labels,
+                    datasets: [{
+                        data: divisionDataset.data,
+                        backgroundColor: divisionDataset.colors,
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { boxWidth: 10, font: { size: 10, weight: 'bold' }, padding: 12 }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        function selectMonth(id) {
+            const item = monthlyDataset.find(o => o.id === id);
+            if (!item) return;
+
+            // Highlight row
+            document.querySelectorAll('.trend-table-row').forEach(row => {
+                row.classList.remove('selected');
+            });
+            document.getElementById(`row-${id}`).classList.add('selected');
+
+            // Process dynamic insight metrics
+            const deviation = (((item.jobs - avgJobs) / avgJobs) * 100).toFixed(1);
+            let feedbackText = '';
+            let indicatorClass = '';
+
+            if (item.jobs > 85) {
+                feedbackText = `This month shows peak procurement operations. Operational resource load balancing is highly recommended to manage officer fatigue.`;
+                indicatorClass = 'bg-rose-50 text-rose-700 border-rose-200';
+            } else if (item.jobs < 65) {
+                feedbackText = `Low operations load detected. This provides an excellent timeframe to clear backlog workloads or run internal audits.`;
+                indicatorClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+            } else {
+                feedbackText = `Standard operational workflow level. Standard operating parameters are running efficiently.`;
+                indicatorClass = 'bg-amber-50 text-amber-700 border-amber-200';
+            }
+
+            const insightsPanel = document.getElementById('insightsPanel');
+            insightsPanel.innerHTML = `
+                <div class="p-4 border rounded-xl ${indicatorClass} transition-all duration-200">
+                    <h4 class="font-extrabold text-base mb-1">${item.month} Statistics</h4>
+                    <p class="text-xs font-semibold leading-relaxed">${feedbackText}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3 text-center">
+                    <div class="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
+                        <span class="text-[10px] text-slate-400 font-bold block uppercase">Total Jobs</span>
+                        <span class="text-xl font-extrabold text-slate-800">${item.jobs}</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
+                        <span class="text-[10px] text-slate-400 font-bold block uppercase">vs. Mean Avg</span>
+                        <span class="text-sm font-extrabold ${item.jobs >= avgJobs ? 'text-emerald-600' : 'text-rose-600'}">${deviation >= 0 ? '+' : ''}${deviation}%</span>
+                    </div>
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-slate-100">
+                    <h5 class="text-[10px] font-extrabold text-slate-400 uppercase mb-2">Estimated Division Share</h5>
+                    <div class="space-y-1.5 text-[11px] font-bold text-slate-600">
+                        <div class="flex justify-between"><span>Life (44.6%):</span> <span>${Math.round(item.jobs * 0.446)} Jobs</span></div>
+                        <div class="flex justify-between"><span>General (39.5%):</span> <span>${Math.round(item.jobs * 0.395)} Jobs</span></div>
+                        <div class="flex justify-between"><span>Holding (12.5%):</span> <span>${Math.round(item.jobs * 0.125)} Jobs</span></div>
+                        <div class="flex justify-between"><span>Joint L&G (3.4%):</span> <span>${Math.round(item.jobs * 0.034)} Jobs</span></div>
+                    </div>
+                </div>
+            `;
+
+            // Dynamic Chart Point Selection Highlight
+            trendChart.setActiveElements([{ datasetIndex: 0, index: id - 1 }]);
+            trendChart.tooltip.setActiveElements([{ datasetIndex: 0, index: id - 1 }]);
+            trendChart.update();
+        }
+
+        function resetInsights() {
+            document.querySelectorAll('.trend-table-row').forEach(row => {
+                row.classList.remove('selected');
+            });
+
+            document.getElementById('insightsPanel').innerHTML = `
+                <div class="text-center">
+                    <i class="fa-solid fa-pointer-arrow text-3xl text-purple-500 mb-2 animate-bounce"></i>
+                    <h4 class="font-bold text-slate-700 text-sm">Interactive Data Explorer</h4>
+                    <p class="text-xs text-slate-400 mt-1 max-w-[200px] mx-auto">Please click on a month row in the table to display instant analytical summaries and alerts.</p>
+                </div>
+            `;
+            trendChart.setActiveElements([]);
+            trendChart.tooltip.setActiveElements([]);
+            trendChart.update();
+        }
+    </script>
+</body>
+</html>
